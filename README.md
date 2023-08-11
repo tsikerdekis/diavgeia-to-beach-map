@@ -8,6 +8,8 @@ The export.json needs to be obtained from diavgeia.gov.gr using:
 
 Then dl_pdfs.py will get the pdfs, parse_pdf.py will parse the pdfs and extract the data, then output them in dat.json. In turn this json is read by index.html.
 
+This is navigable through the web at: https://tsikerdekis.com/diavgeia-to-beach-map/
+
 # TODO
 
 * Add a map with the locations of the businesses (possibly use OCR since recent records include coordinates)
