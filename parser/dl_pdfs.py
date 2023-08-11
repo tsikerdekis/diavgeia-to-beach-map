@@ -33,7 +33,7 @@ def main():
     skipped_count = 0
 
     for index, record in enumerate(data["decisionResultList"], start=1):
-        if "2023" in str(record):
+        if "2023" in str(record) or "2022" in str(record):
             pdf_url = record["documentUrl"]
             pdf_filename = pdf_url.split("/")[-1] + ".pdf"
             pdf_path = os.path.join(pdfs_folder, pdf_filename)
