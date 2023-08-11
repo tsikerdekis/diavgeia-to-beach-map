@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta charset="utf-8" />
+
+    <!-- Reference to the Bing Maps SDK -->
+    <script type='text/javascript'
+            src='http://www.bing.com/api/maps/mapcontrol?callback=GetMap&setMkt=el&setLang=el&key=AvU-kQHyioJBmXsT7T0H96XhSNPqxmmJhanur2HxxnF9cdKfHo_bT2RwtlsbWAAR' 
+            async defer></script>
+    
+    <script type='text/javascript'>
+    async function GetMap()
+    {
+        const map = new Microsoft.Maps.Map('#myMap', {
+            mapTypeId: Microsoft.Maps.MapTypeId.aerial,
+            center: new Microsoft.Maps.Location(40.000794,23.496747),
+        });
+
+        const response = await fetch('data.json', {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+            },
+        });
+        const data = await response.json();
+        
+        for (const dat of data) {
+            const pin = new Microsoft.Maps.Pushpin(new Microsoft.Maps.Location(dat.lat,dat.lon), {
+                title: dat.name,
+                subTitle: dat.description,
+                //text: dat.id
+            });
+            map.entities.push(pin);
+        }
+    }
+    </script>
+</head>
+<body>
+    <div id="myMap" style="position:relative;width:600px;height:400px;"></div>
+</body>
+</html>
