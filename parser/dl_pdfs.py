@@ -3,6 +3,7 @@ import json
 import time
 import random
 import requests
+import re
 
 # Path to the PDFs folder
 pdfs_folder = "../pdfs"
@@ -31,9 +32,14 @@ def main():
     total_records = len(data["decisionResultList"])
     downloaded_count = 0
     skipped_count = 0
+    recalls = []
 
     for index, record in enumerate(data["decisionResultList"], start=1):
-        if "2023" in str(record) or "2022" in str(record):
+        if ("ΑΝΑΚΛΗΣΗ" in str(record)):
+            match = re.search(r'ΥΠ\.ΑΡΙΘΜ\.ΑΔΑ (.+?)(?=",decisionTypeUid)', str(record))
+            if match:
+                recalls.append(match.group(1))
+        if any(year in str(record) for year in ["2021", "2022", "2023"]) and "ΑΝΑΚΛΗΣΗ" not in str(record):
             pdf_url = record["documentUrl"]
             pdf_filename = pdf_url.split("/")[-1] + ".pdf"
             pdf_path = os.path.join(pdfs_folder, pdf_filename)
@@ -49,9 +55,14 @@ def main():
                     sleep_duration = random.randint(5, 10)
                     print(f"[{index}/{total_records}] Sleeping for {sleep_duration} seconds...")
                     time.sleep(sleep_duration)
+        # Remove any recalls that may have been downloaded
+        for recall in recalls:
+            if os.path.exists(os.path.join(pdfs_folder, recall + ".pdf")):
+                os.remove(os.path.join(pdfs_folder, recall + ".pdf"))
 
     print(f"Downloaded {downloaded_count} files.")
     print(f"Skipped {skipped_count} files.")
+    print(f"Recalls removed {len(recalls)} files.")
 
 if __name__ == "__main__":
     main()
