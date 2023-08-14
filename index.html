@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JSON Table</title>
+    <title>Άδειες αιγιαλου Κασσανδρας (2021, 2022, 2023)</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -24,14 +24,14 @@
     </style>
 </head>
 <body>
+    Σημείωση: περιλαμβάνει όλες τις άδειες απο 2021 μεχρι 2023 εκτός αυτών που ανακλήθηκαν. Κάποιες μπορεί να έχουν λήξει, ελεγξτε το PDF.
     <table id="jsonTable">
         <thead>
             <tr>
                 <th>Επιχείρηση</th>
                 <th>Τοποθεσία</th>
-                <th>Άδεια</th>
-                <th>Τετραγωνικά</th>
-                <th>Λήξη άδειας</th>
+                <th>Συντεταγμενες</th>
+                <th>Αδεια PDF</th>
             </tr>
         </thead>
         <tbody>
@@ -45,9 +45,16 @@
                 const tableBody = document.querySelector('#jsonTable tbody');
                 data.forEach(rowData => {
                     const row = document.createElement('tr');
-                    rowData.forEach(cellData => {
+                    rowData.forEach((cellData, index) => {
                         const cell = document.createElement('td');
-                        cell.textContent = cellData;
+                        if (index === rowData.length - 1) { // Check if last element
+                            const pdfLink = document.createElement('a');
+                            pdfLink.href = cellData; // Assuming cellData contains the PDF link
+                            pdfLink.textContent = 'PDF Link'; // You can set the link text here
+                            cell.appendChild(pdfLink);
+                        } else {
+                            cell.textContent = cellData;
+                        }
                         row.appendChild(cell);
                     });
                     tableBody.appendChild(row);
@@ -55,5 +62,6 @@
             })
             .catch(error => console.error('Error fetching JSON:', error));
     </script>
+    
 </body>
 </html>

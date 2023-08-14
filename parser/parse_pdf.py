@@ -2,11 +2,13 @@ import os
 import re
 import fitz  # PyMuPDF
 import json
+from pdf_ocr.pdf_ocr import extract_and_ocr_pdf
 
 # Path to the PDFs folder
 pdfs_folder = "../pdfs"
 output_json_file = "../dat.json"
 
+# DEPRECATED
 def search_pattern_in_pdf(pdf_path):
     # Open the PDF file
     pdf_document = fitz.open(pdf_path)
@@ -38,11 +40,17 @@ def main():
     for pdf_file in pdf_files:
         pdf_path = os.path.join(pdfs_folder, pdf_file)
         print(pdf_file)
-        extracted_values = search_pattern_in_pdf(pdf_path)        
+        extracted_values = extract_and_ocr_pdf(pdf_path)
+        print(extracted_values)
+        values_list = []
+        if extracted_values[0] != "":
+            values_list.extend(extracted_values[0])
+            values_list.append(extracted_values[1])
+            values_list.append("https://diavgeia.gov.gr/doc/%s" % (os.path.splitext(pdf_file)[0]))
         
         if extracted_values:
             print(f"Pattern found in '{pdf_file}':")
-            all_extracted_values.extend(extracted_values)
+            all_extracted_values.append(values_list)
         else:
             print(f"No pattern found in '{pdf_file}'.")
 
